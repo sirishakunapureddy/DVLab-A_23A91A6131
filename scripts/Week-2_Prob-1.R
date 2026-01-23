@@ -1,66 +1,73 @@
-#load the dataset
-data(iris)
+#load Air Passengers Dataset
+data(AirPassengers)
 
-#inspect the data
-?iris
-head(iris,3)
-str(iris)
-class(iris)
+#Verify the Dataset
+?AirPassengers
+class(AirPassengers)
+View(AirPassengers)
 
-#count of each species and to see data in column "species"
-iris$Species
-View(iris)
+#Convert the Dataset to DataFrame
+ap_df <- data.frame(
+  year <- time(AirPassengers),
+  passengers = as.numeric(AirPassengers)
+)
+ap_df
 
-#ploting a bar chart
-barplot(
-  table(iris$Species),
-  col='pink'
+#DataFrame with Years and Months Seperately
+ap_df_months <- data.frame(
+  year = floor(time(AirPassengers)),
+  month = cycle(time(AirPassengers)),
+  passengers = as.numeric(AirPassengers)
+)
+ap_df_months
+
+#Basic plot
+plot(AirPassengers)
+
+#Plot with Title,Axis labels and color
+plot(AirPassengers,
+     type = 'l',
+     main = "Air Passengers Trend Analysis",
+     xlab = "Months",
+     ylab = "No of Passengers",
+     col = "red"
 )
 
-#labeld bar chart
-barplot(
-  table(iris$Species),
-  main="Count of Iris Species",
-  xlab="Species",
-  ylab="Number of Items",
-  col='steelblue'
+#Changing the line width and point color
+plot(AirPassengers,
+     type = 'l',
+     lwd = 1.5,
+     main = "Air Passengers Trend Analysis",
+     xlab = "Months",
+     ylab = "No of Passengers",
+     col = "red"
 )
-
-#bar plot from aggregated data using mean sepal length per species
-mean_sepal<-tapply(iris$Sepal.Length,iris$Species,mean)
-mean_sepal
-
-barplot(
-  mean_sepal,
-  col='orange',
-  main="Average Sepal Length by Species",
-  xlab="Species",
-  ylab="Mean Sepal Length"
+points(AirPassengers,
+       type = 'o',
+       pch = 16,
+       col = "blue"
 )
-
-#grouped bar chart
-group_means<-rbind(
-  sepal=tapply(iris$Sepal.Length,iris$Species,mean),
-  petal=tapply(iris$Petal.Length,iris$Species,mean)
-)
-group_means
-
-barplot(
-  group_means,
-  beside=TRUE,
-  col=c("skyblue","pink"),
-  legend.text=TRUE,
-  main="Clustered Bar Chart: Sepal vs Petal Length"
-)
-barplot(
-  group_means,
-  beside=FALSE,
-  col=c("skyblue","pink"),
-  legend.text=TRUE,
-  main="Stacked Bar Chart: Sepal vs Petal Length"
-)
+grid()
 
 
-## End of File
-## New
-  
+#using ggplot2 library
+library(ggplot2)
+
+#A basic grid with x&y axes
+ggplot(
+  ap_df,
+  aes(x=year,y=passengers))+
+  geom_line(color='blue',linewidth=0.7)+
+  labs(
+    title='Trend Analysis of Air Passengers',
+    subtitle='From 1949-1960',
+    caption='using Built-in Air Passengers Dataset',
+    x='Months',
+    y='No.of Passengers')+
+  geom_point(color='red',size=2)+
+  geom_smooth(se=FALSE,color='orange',linewidth=0.8)+
+  theme_minimal()+
+  theme(
+    plot.title=element_text(face="bold",size=14,color = 'brown',hjust = 0.5),
+    plot.subtitle=element_text(size=10,hjust=0.5)
+  )
