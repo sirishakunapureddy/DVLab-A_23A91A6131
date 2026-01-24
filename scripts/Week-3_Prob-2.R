@@ -37,7 +37,7 @@ barplot(
   
 )
 
-#grouped bar chart
+#grouped bar chart by Month
 group_means<-rbind(
   wind=tapply(airquality$Wind,airquality$Month,mean),
   temp=tapply(airquality$Temp,airquality$Month,mean)
@@ -57,4 +57,26 @@ barplot(
   col=c("steelblue","orange"),
   legend.text=TRUE,
   main="Stacked Bar Chart: Wind vs Temp by Month",
+)
+
+#grouped bar chart by Day
+group_means<-rbind(
+  wind=tapply(airquality$Wind,airquality$Day,mean),
+  temp=tapply(airquality$Temp,airquality$Day,mean)
+)
+group_means
+
+barplot(
+  group_means,
+  beside=TRUE,
+  col=c("steelblue","orange"),
+  legend.text=TRUE,
+  main="Clustered Bar Chart: Wind vs Temp by Day"
+)
+barplot(
+  group_means,
+  beside=FALSE,
+  col=c("steelblue","orange"),
+  legend.text=TRUE,
+  main="Stacked Bar Chart: Wind vs Temp by Day",
 )
