@@ -33,3 +33,29 @@ pal <- colorNumeric(
   palette = "red",
   domain = cities$pop
 )
+leaflet(cities) %>%addTiles() %>% addCircleMarkers(lng =~ lng,lat =~ lat,radius =~ pop/2, color =~ pal(pop),popup =~ name)
+
+#Add Legend
+leaflet(cities) %>% addTiles %>% addCircleMarkers( lng =~ lng,lat =~ lat,radius =~pop/2,color =~ pal(pop),popup =~name) %>%
+  addLegend("bottomright",pal = pal, values =~ pop,title = "Population")
+
+#Different Map Styles Leaflet supports different tile layers.
+#Default Open Street
+leaflet() %>% addProviderTiles("OpenStreetMap")
+
+#Dark Theme
+leaflet() %>% addProviderTiles("CartoDB.DarkMatter")
+
+#Light minimal
+leaflet()%>% addProviderTiles("CartoDB.Positron")
+
+#Satellite imagery
+leaflet()%>% addProviderTiles("Esri.WorldImagery")
+
+#advanced map with layers
+leaflet(cities)%>% addTiles()%>% addCircleMarkers(
+  lng=~lng,
+  lat=~lat,
+  radius=8,color="blue",group="Cities")%>% addLayersControl(
+    overlayGroups = c("Cities"),options=layersControlOptions(collapsed = TRUE)
+  )
